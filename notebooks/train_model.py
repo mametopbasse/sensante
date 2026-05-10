@@ -197,3 +197,66 @@ print("\nProbabilités par classe :")
 for classe, proba in zip(model_loaded.classes_, probas):
     bar = '#' * int(proba * 30)
     print(f" {classe:8s} : {proba:.1%} {bar}")
+# Importance des features
+importances = model.feature_importances_
+
+print("\n--- Importance des features ---")
+for name, imp in sorted(
+    zip(feature_cols, importances),
+    key=lambda x: x[1],
+    reverse=True
+):
+    print(f"{name:20s} : {imp:.3f}")
+# Nouveaux patients de test
+patients = [
+    # 1. Jeune sans symptômes
+    {
+        'age': 20, 'sexe': 'M', 'temperature': 36.5,
+        'tension_sys': 120, 'toux': False,
+        'fatigue': False, 'maux_tete': False,
+        'region': 'Dakar'
+    },
+    # 2. Adulte avec forte fièvre
+    {
+        'age': 35, 'sexe': 'F', 'temperature': 40.0,
+        'tension_sys': 115, 'toux': True,
+        'fatigue': True, 'maux_tete': True,
+        'region': 'Dakar'
+    },
+    # 3. Patient âgé avec toux
+    {
+        'age': 70, 'sexe': 'M', 'temperature': 38.0,
+        'tension_sys': 130, 'toux': True,
+        'fatigue': True, 'maux_tete': False,
+        'region': 'Dakar'
+    }
+]
+
+import pandas as pd
+
+print("\n--- Test sur nouveaux patients ---")
+
+for p in patients:
+    # Encodage
+    sexe_enc = le_sexe.transform([p['sexe']])[0]
+    region_enc = le_region.transform([p['region']])[0]
+
+    # Création du dictionnaire avec les BONNES colonnes
+    features_dict = {
+        'age': p['age'],
+        'sexe_encoded': sexe_enc,
+        'temperature': p['temperature'],
+        'tension_sys': p['tension_sys'],
+        'toux': int(p['toux']),
+        'fatigue': int(p['fatigue']),
+        'maux_tete': int(p['maux_tete']),
+        'region_encoded': region_enc
+    }
+
+    # Conversion en DataFrame (solution propre)
+    features_df = pd.DataFrame([features_dict])
+
+    # Prédiction
+    pred = model.predict(features_df)[0]
+
+    print(f"Patient {p['age']} ans → Diagnostic : {pred}")
