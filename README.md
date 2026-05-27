@@ -47,7 +47,19 @@ comme :
 - Docker
 - Groq / Llama 3
 
+## Demo en ligne
+https://VOTRE_NOM-sensante.hf.space
+## Stack
+- scikit-learn (modele ML)
+- FastAPI (API REST)
+- Tailwind CSS (frontend responsive)
+- Groq / Llama 3 (explication LLM)
+- Docker (conteneurisation)
+
 ## Auteur
 
 Mame Top Basse - L2 GLSI - ESP/UCAD
+<<<<<<< HEAD
 >>>>>>> 2ec48ae (Initial clean commit)
+=======
+>>>>>>> 3782af7 (Lab 6 : Docker + deploiement HF Spaces (v1.0))
